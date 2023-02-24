@@ -1,51 +1,43 @@
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
-
-// export const App = () => {
-//   return (
-//     <div
-//       style={{
-//         // height: '100vh',
-//         // display: 'flex',
-//         // justifyContent: 'center',
-//         // alignItems: 'center',
-//         fontSize: 40,
-//         color: '#010101',
-//       }}
-//     >
-//       <ContactForm />
-//       <ContactList />
-//     </div>
-//   );
-// };
+import { Filter } from './Filter/Filter';
 
 export class App extends Component {
   state = {
     contacts: [
-      { id: 1, name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 2, name: 'Hermione Kline', number: '443-89-12' },
-      { id: 3, name: 'Eden Clements', number: '645-17-79' },
-      { id: 4, name: 'Annie Copeland', number: '227-91-26' },
+      { id: nanoid(), name: 'Rosie Simpson', number: '459-12-56' },
+      { id: nanoid(), name: 'Hermione Kline', number: '443-89-12' },
+      { id: nanoid(), name: 'Eden Clements', number: '645-17-79' },
+      { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
     name: '',
     number: '',
   };
 
-  addContact = (contactName) => {
-    this.setState((oldState) => {
+  resetForm = () => {
+    this.setState({ name: '', number: '' });
+  };
+
+  onChangeInput = evt => {
+    const { name, value } = evt.currentTarget;
+    this.setState({ [name]: value });
+  };
+
+  addContact = () => {
+    this.setState(oldState => {
       const list = [...oldState.contacts];
-      list.push({ id: list[list.length-1].id + 1, name: contactName });
-      // 
+      list.push({
+        id: nanoid(),
+        name: oldState.name,
+        number: oldState.number,
+      });
+      //
       return { contacts: list };
-
     });
-  }
-
-  // addContact = contactName => {
-  //   this.setState({ contacts: [{ name: contactName }] });
-  // };
+  };
 
   render() {
     return (
@@ -60,7 +52,16 @@ export class App extends Component {
           color: '#010101',
         }}
       >
-        <ContactForm addContact={this.addContact} />
+        <h2>Phonebook</h2>
+        <ContactForm
+          name={this.state.name}
+          number={this.state.number}
+          onChangeInput={this.onChangeInput}
+          addContact={this.addContact}
+          resetForm={this.resetForm}
+        />
+        <h2>Contacts</h2>
+        <Filter filter={this.state.filter} onChangeInput={this.onChangeInput} />
         <ContactList contacts={this.state.contacts} />
       </div>
     );

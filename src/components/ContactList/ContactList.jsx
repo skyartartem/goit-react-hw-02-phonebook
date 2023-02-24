@@ -2,17 +2,17 @@
 
 export const ContactList = ({ contacts }) => {
   return (
-    <div>
-      <h2>Contacts</h2>
+          
       <ul>
         {contacts.map(contact => {
           return (
             <li key={contact.id}>
-              <span>{contact.name}</span>
+                  <span>{contact.name}:</span>
+                  <span> {contact.number}</span>
             </li>
           );
         })}
       </ul>
-    </div>
+    
   );
 };

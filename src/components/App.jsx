@@ -3,6 +3,7 @@ import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
+import css from './App.module.css';
 
 export class App extends Component {
   state = {
@@ -13,19 +14,6 @@ export class App extends Component {
       { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
-  };
-
-  filter = () => {
-    const { contacts, filter } = this.state;
-        const filteredContacts = contacts.filter(contact => 
-          contact.name.toLowerCase().includes(filter.toLowerCase()));
-    return filteredContacts;
-  };
-
-  resetForm = () => {
-    this.setState({ name: '', number: '' });
   };
 
   onChangeInput = evt => {
@@ -33,86 +21,49 @@ export class App extends Component {
     this.setState({ [name]: value });
   };
 
-  addContact = () => {
-    this.setState(oldState => {
-      const list = [...oldState.contacts];
-      list.push({
-        id: nanoid(),
-        name: oldState.name,
-        number: oldState.number,
+  addContact = ({ name, number }) => {
+    if (
+      this.state.contacts.some(
+        value => value.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+      )
+    ) {
+      alert(`${name} is alredy in contacts`);
+    } else {
+      this.setState(oldState => {
+        const list = [...oldState.contacts];
+        list.push({
+          id: nanoid(),
+          name: name,
+          number: number,
+        });
+        return { contacts: list };
       });
-      //
-      return { contacts: list };
-    });
+    }
+  };
+
+  filter = () => {
+    const { contacts, filter } = this.state;
+    const filteredContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    return filteredContacts;
+  };
+
+  delContact = id => {
+    const { contacts } = this.state;
+    const filtred = contacts.filter(item => item.id !== id);
+    this.setState({ contacts: filtred });
   };
 
   render() {
     return (
-      <div
-        style={{
-          // height: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          // justifyContent: 'center',
-          alignItems: 'center',
-          // fontSize: 40,
-          color: '#010101',
-        }}
-      >
-        <h2>Phonebook</h2>
-        <ContactForm
-          name={this.state.name}
-          number={this.state.number}
-          onChangeInput={this.onChangeInput}
-          addContact={this.addContact}
-          resetForm={this.resetForm}
-        />
+      <div className={css.conteiner}>
+        <h1>Phonebook</h1>
+        <ContactForm addContact={this.addContact} />
         <h2>Contacts</h2>
-        <Filter
-          filter={this.state.filter}
-          // filterFunc={this.filterFunc}
-          onChangeInput={this.onChangeInput}
-        />
-        <ContactList contacts={this.filter()} />
+        <Filter filter={this.state.filter} onChangeInput={this.onChangeInput} />
+        <ContactList delContact={this.delContact} contacts={this.filter()} />
       </div>
     );
   }
 }
-
-// ChatGPT -filter-
-// export class App extends Component {
-//   state = {
-//     contacts: [
-//       { name: 'John', phone: '123-456-7890' },
-//       { name: 'Mary', phone: '234-567-8901' },
-//       { name: 'Bob', phone: '345-678-9012' },
-//     ],
-//     searchQuery: '',
-//   };
-
-//   handleSearch = event => {
-//     const searchQuery = event.target.value.toLowerCase();
-//     this.setState({ searchQuery });
-//   };
-
-//   render() {
-//     const { contacts, searchQuery } = this.state;
-//     const filteredContacts = contacts.filter(contact => {
-//       const contactName = contact.name.toLowerCase();
-//       return contactName.includes(searchQuery);
-//     });
-
-//     return (
-//       <div>
-//         <input type="text" onChange={this.handleSearch} />
-//         <ul>
-//           {filteredContacts.map((contact, index) => (
-//             <li key={index}>
-//               {contact.name} - {contact.phone}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     );
-//   }
-// }

@@ -17,6 +17,13 @@ export class App extends Component {
     number: '',
   };
 
+  filter = () => {
+    const { contacts, filter } = this.state;
+        const filteredContacts = contacts.filter(contact => 
+          contact.name.toLowerCase().includes(filter.toLowerCase()));
+    return filteredContacts;
+  };
+
   resetForm = () => {
     this.setState({ name: '', number: '' });
   };
@@ -61,9 +68,51 @@ export class App extends Component {
           resetForm={this.resetForm}
         />
         <h2>Contacts</h2>
-        <Filter filter={this.state.filter} onChangeInput={this.onChangeInput} />
-        <ContactList contacts={this.state.contacts} />
+        <Filter
+          filter={this.state.filter}
+          // filterFunc={this.filterFunc}
+          onChangeInput={this.onChangeInput}
+        />
+        <ContactList contacts={this.filter()} />
       </div>
     );
   }
 }
+
+// ChatGPT -filter-
+// export class App extends Component {
+//   state = {
+//     contacts: [
+//       { name: 'John', phone: '123-456-7890' },
+//       { name: 'Mary', phone: '234-567-8901' },
+//       { name: 'Bob', phone: '345-678-9012' },
+//     ],
+//     searchQuery: '',
+//   };
+
+//   handleSearch = event => {
+//     const searchQuery = event.target.value.toLowerCase();
+//     this.setState({ searchQuery });
+//   };
+
+//   render() {
+//     const { contacts, searchQuery } = this.state;
+//     const filteredContacts = contacts.filter(contact => {
+//       const contactName = contact.name.toLowerCase();
+//       return contactName.includes(searchQuery);
+//     });
+
+//     return (
+//       <div>
+//         <input type="text" onChange={this.handleSearch} />
+//         <ul>
+//           {filteredContacts.map((contact, index) => (
+//             <li key={index}>
+//               {contact.name} - {contact.phone}
+//             </li>
+//           ))}
+//         </ul>
+//       </div>
+//     );
+//   }
+// }

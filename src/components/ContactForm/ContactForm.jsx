@@ -1,3 +1,5 @@
+// import { Component } from 'react';
+
 export const ContactForm = ({
   number,
   name,
@@ -26,8 +28,8 @@ export const ContactForm = ({
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
           />
-              </label>
-              <br />
+        </label>
+        <br />
         <label htmlFor="">
           Number
           <br />

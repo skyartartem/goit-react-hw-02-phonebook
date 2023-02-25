@@ -1,6 +1,6 @@
 
 
-export const Filter = ({ filter, onChangeInput }) => {
+export const Filter = ({ filter, filterFunc, onChangeInput }) => {
   return (
     <>
       <label>
